@@ -15,6 +15,10 @@ app.use('/', medicoRoutes);
 app.use('/', especialidadRoutes);
 app.use('/', turnoRoutes);
 
+app.get("/index.pug", (req,res) => {
+    res.send("  ")
+})
+
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
 });

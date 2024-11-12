@@ -1,10 +1,10 @@
 const mysql = require('mysql2/promise');
 
 const db = mysql.createPool({
-    host: 'localhost',
-    user: 'consulta',
-    password: '1234',
-    database: 'consula_agenda'
+    host: process.env.MYSQL_HOST || 'localhost',
+    user: process.env.MYSQL_USER ||'consulta',
+    password: process.env.MYSQL_PASSWORD ||'1234',
+    database: process.env.MYSQL_DB || 'consula_agenda'
 });
 
 module.exports = db;
