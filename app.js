@@ -3,6 +3,7 @@ const bodyParser = require('body-parser');
 const medicoRoutes = require('./routes/medicoRoutes');
 const especialidadRoutes = require('./routes/especialidadRoutes');
 const turnoRoutes = require('./routes/turnoRoutes');
+const path = require('path');
 const app = express();
 
 app.use(express.json());
