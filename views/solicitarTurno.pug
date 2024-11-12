@@ -1,0 +1,92 @@
+extends layout
+
+block content
+    h1.text-center Solicitar Turno
+    form(method='POST' action='/turnos/solicitar')
+        .mb-3
+            label(for='id_especialidad') Especialidad
+            select#id_especialidad.form-control(name='id_especialidad', onchange='cargarMedicos()')
+                each especialidad in especialidades
+                    option(value=especialidad.id_especialidad)= especialidad.descripcion
+        
+        .mb-3
+            label(for='id_medico') Médico
+            select#id_medico.form-control(name='id_medico', onchange='cargarHorarios()')
+                option(value='') Selecciona un médico
+
+        .mb-3
+            label(for='fecha') Fecha
+            input#fecha.form-control(type='date' name='fecha' onchange='cargarHorarios()' required)
+
+        .mb-3
+            label(for='hora') Hora
+            select#hora.form-control(name='hora', required)
+                option(value='') Selecciona una hora
+
+        button.btn.btn-primary(type='submit') Solicitar Turno
+
+    script.
+        // Función para cargar médicos según especialidad
+        function cargarMedicos() {
+            var id_especialidad = document.getElementById('id_especialidad').value;
+            if (id_especialidad) {
+                // Hacer la solicitud AJAX al backend para obtener médicos
+                fetch(`/medicos/${id_especialidad}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Error al obtener los médicos');
+                        }
+                        return response.json(); // Convertimos la respuesta a JSON
+                    })
+                    .then(medicos => {
+                        var medicoSelect = document.getElementById('id_medico');
+                        medicoSelect.innerHTML = '<option value="">Selecciona un médico</option>'; // Limpiar opciones anteriores
+                        
+                        if (medicos.length === 0) {
+                            medicoSelect.innerHTML += '<option value="">No hay médicos disponibles</option>';
+                        } else {
+                            // Rellenar el select con los médicos obtenidos
+                            medicos.forEach(medico => {
+                                var option = document.createElement('option');
+                                option.value = medico.id;
+                                option.textContent = medico.nombre;
+                                medicoSelect.appendChild(option);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Hubo un problema al obtener los médicos');
+                    });
+            }
+        }
+
+        // Función para cargar horarios disponibles para un médico y fecha
+        function cargarHorarios() {
+            var id_medico = document.getElementById('id_medico').value;
+            var fecha = document.getElementById('fecha').value;
+            var horaSelect = document.getElementById('hora');
+            horaSelect.innerHTML = '<option value="">Selecciona una hora</option>'; // Limpiar opciones anteriores
+
+            if (id_medico && fecha) {
+                // Hacer la solicitud AJAX al backend para obtener horarios
+                fetch(`/horarios/${id_medico}?fecha=${fecha}`)
+                    .then(response => response.json())
+                    .then(horarios => {
+                        if (horarios.length === 0) {
+                            horaSelect.innerHTML = '<option value="">No hay horarios disponibles</option>';
+                        } else {
+                            horarios.forEach(horario => {
+                                var option = document.createElement('option');
+                                option.value = horario.hora;
+                                option.textContent = horario.hora;
+                                horaSelect.appendChild(option);
+                            });
+                        }
+                    })
+                    .catch(error => {
+                        console.error(error);
+                        alert('Hubo un problema al obtener los horarios');
+                    });
+            }
+        }

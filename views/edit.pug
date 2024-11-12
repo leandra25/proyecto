@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    h1.text-center Editar Médico
+    form(method='POST' action=`/edit/${medico.id}` class='mt-4' id='medicoForm')
+        .mb-3
+            label(for='nombre') Nombre
+            input#nombre.form-control(type='text' name='nombre' value=medico.nombre required)
+        .mb-3
+            label(for='especialidad') Especialidad
+            input#especialidad.form-control(type='text' name='especialidad' value=medico.especialidad required)
+        .mb-3
+            label(for='email') Email
+            input#email.form-control(type='email' name='email' value=medico.email required)
+        button.btn.btn-warning(type='submit') Actualizar

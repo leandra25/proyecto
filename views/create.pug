@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    h1.text-center Crear Médico
+    form(method='POST' action='/create' class='mt-4' id='medicoForm')
+        .mb-3
+            label(for='nombre') Nombre
+            input#nombre.form-control(type='text' name='nombre' required)
+        .mb-3
+            label(for='especialidad') Especialidad
+            input#especialidad.form-control(type='text' name='especialidad' required)
+        .mb-3
+            label(for='email') Email
+            input#email.form-control(type='email' name='email' required)
+        button.btn.btn-primary(type='submit') Añadir

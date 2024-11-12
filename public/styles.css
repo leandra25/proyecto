@@ -1,0 +1,29 @@
+body {
+    background-color: #3d86cf;
+}
+body {
+    margin: 0; 
+    padding: 0; 
+    height: 100vh;
+    background-image: url('/image/imagen.jpg'); 
+    background-size: cover; 
+    background-position: center center; 
+    background-attachment: fixed;
+}
+.tachado {
+    text-decoration: line-through; 
+    color: red; 
+}
+
+.container-inline {
+    display: flex;        
+    flex-wrap: wrap;      
+    justify-content: space-around; 
+    align-items: center; 
+    gap: 20px;           
+}
+
+
+.container-inline a {
+    margin: 10px;  
+}

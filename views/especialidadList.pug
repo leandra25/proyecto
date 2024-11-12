@@ -1,0 +1,19 @@
+extends layout
+
+block content
+    h1.text-center Gestionar Especialidades
+    a(href='/especialidad/create' class='btn btn-primary mt-4') Añadir Especialidad
+    table.table.table-striped
+        thead
+            tr
+                th Descripción
+                th Acciones
+        tbody
+            each especialidad in especialidades
+                tr
+                    td= especialidad.descripcion
+                    td
+                        a(href=`/especialidad/edit/${especialidad.id_especialidad}` class='btn btn-warning') Editar
+                        form(method='POST' action=`/especialidad/delete/${especialidad.id_especialidad}` style='display:inline')
+                            button.btn.btn-danger(type='submit') Eliminar
+

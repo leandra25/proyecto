@@ -1,0 +1,39 @@
+extends layout
+
+block content
+ .container-inline
+    
+    a(href='/turnos' class='btn btn-primary mt-4') Solicitar Turno
+    
+    a(href='/especialidad' class='btn btn-primary mt-4') Añadir Especialidad  
+    
+    a(href='/create' class='btn btn-primary mt-4') Añadir Médico
+    
+
+
+    table.table.table-striped
+        thead
+            tr
+                th Nombre
+                th Especialidad
+                th Email
+                th Estado
+                th Acciones
+        tbody
+            each medico in medicos
+                tr(class= (medico.estado == 1)? 'activo' : 'inactivo' data-id=medico.id)
+                    td= medico.nombre
+                    td= medico.especialidad
+                    td= medico.email
+                    td(id=`estado_${medico.id}`)=(medico.estado == 1)?  'Activo' : 'Inactivo'
+                    td
+                     a(href=`/edit/${medico.id}` class='btn btn-primary') Editar
+                     if medico.estado == 1
+                        button.btn.btn-danger(onclick=`inactivar(${medico.id})`
+                              id=`button_${medico.id}`) Inactivar 
+                     else 
+                        button.btn.btn-success(onclick=`activar(${medico.id})`
+                              id=`button_${medico.id}`) Activar
+                        
+
+    script(src='/script.js')                    
