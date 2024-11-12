@@ -2,8 +2,8 @@ const express = require('express');
 const router = express.Router();
 const TurnoController = require('../controllers/turnoController');
 
-router.get('/turnos', TurnoController.listar);
-router.post('/turnos/solicitar', TurnoController.solicitar);
+router.get('/', TurnoController.listar);
+router.post('/solicitar', TurnoController.solicitar);
 
 
 // Ruta para obtener médicos según especialidad

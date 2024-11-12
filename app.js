@@ -11,13 +11,13 @@ app.set('views', './views');
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.use('/', medicoRoutes);
-app.use('/', especialidadRoutes);
-app.use('/', turnoRoutes);
 
-app.get("/index.pug", (req,res) => {
-    res.send("  ")
-})
+
+app.use('/', medicoRoutes);
+app.use('/especialidad', especialidadRoutes);
+app.use('/turnos', turnoRoutes);
+
+
 
 app.listen(3000, () => {
     console.log('Servidor corriendo en http://localhost:3000');
