@@ -2,65 +2,91 @@ const db = require('../config/db');
 
 class Medico {
     static async all() {
-        const [results] = await db.query('SELECT * FROM medicos');
-        return results;//trae todos los medicos de la base de datos
+        const connection = await db; // Obtén la conexión
+        try {
+            const [results] = await connection.query('SELECT * FROM medicos');
+            return results; // Devuelve todos los médicos de la base de datos
+        } finally {
+            await connection.end(); // Asegúrate de cerrar la conexión después
+        }
     }
 
     static async create(medico) {
-        const query = "INSERT INTO medicos (nombre, email, estado,especialidad) VALUES ( ?, ?, ?, ?)";
-        await db.query(query, [medico.nombre, medico.email, medico.activo, medico.especialidad]);//agrega un nuevo medico a la db
+        const connection = await db; // Obtén la conexión
+        const query = "INSERT INTO medicos (nombre, email, estado, especialidad) VALUES (?, ?, ?, ?)";
+        try {
+            await connection.query(query, [medico.nombre, medico.email, medico.activo, medico.especialidad]); // Agrega un nuevo médico a la DB
+        } finally {
+            await connection.end(); // Cierra la conexión
+        }
     }
 
     static async findById(id) {
-        const [results] = await db.query('SELECT * FROM medicos WHERE id = ?', [id]);
-        return results[0];//consulta a la db sobre un registro
+        const connection = await db; // Obtén la conexión
+        try {
+            const [results] = await connection.query('SELECT * FROM medicos WHERE id = ?', [id]);
+            return results[0]; // Consulta a la DB sobre un registro específico
+        } finally {
+            await connection.end(); // Cierra la conexión
+        }
     }
 
     static async update(id, medico) {
+        const connection = await db; // Obtén la conexión
         const query = 'UPDATE medicos SET ? WHERE id = ?';
-        await db.query(query, [medico, id]);//actualiza un registro
-    }
-
-    static async inactivar(id){//inactiva el estado del medico
-
-        try{
-        const [result] = await db.query(
-            'update medicos set estado = 0 where id= ?', [id]
-        );
-        return result.affectedRows == 1;
-
-        }catch(error) {
-            return false;
+        try {
+            await connection.query(query, [medico, id]); // Actualiza el registro
+        } finally {
+            await connection.end(); // Cierra la conexión
         }
     }
 
-    
-    static async activar(id){//activa el estado del medico
-
-        try{
-        const [result] = await db.query(
-            'update medicos set estado = 1 where id= ?', [id]
-        );
-        return result.affectedRows == 1;
-
-        }catch(error) {
-            return false;
-            
-
-        }}
-        static async obtenerPorEspecialidad(id_especialidad) {
-            const query = `
-                SELECT m.id, m.nombre
-                FROM medicos m
-                JOIN medico_especialidad me ON m.id = me.id_medicos
-                WHERE me.id_especialidad = ?
-            `;
-            const [medicos] = await db.query(query, [id_especialidad]);
-            return medicos;
+    static async inactivar(id) {
+        const connection = await db; // Obtén la conexión
+        try {
+            const [result] = await connection.query(
+                'UPDATE medicos SET estado = 0 WHERE id = ?', [id]
+            );
+            return result.affectedRows === 1; // Devuelve true si se actualizó correctamente
+        } catch (error) {
+            console.error('Error al inactivar el médico:', error);
+            return false; // Si ocurre un error, devuelve false
+        } finally {
+            await connection.end(); // Cierra la conexión
         }
-        
-        
-       
+    }
+
+    static async activar(id) {
+        const connection = await db; // Obtén la conexión
+        try {
+            const [result] = await connection.query(
+                'UPDATE medicos SET estado = 1 WHERE id = ?', [id]
+            );
+            return result.affectedRows === 1; // Devuelve true si se actualizó correctamente
+        } catch (error) {
+            console.error('Error al activar el médico:', error);
+            return false; // Si ocurre un error, devuelve false
+        } finally {
+            await connection.end(); // Cierra la conexión
+        }
+    }
+
+    static async obtenerPorEspecialidad(id_especialidad) {
+        const connection = await db; // Obtén la conexión
+        const query = `
+            SELECT m.id, m.nombre
+            FROM medicos m
+            JOIN medico_especialidad me ON m.id = me.id_medicos
+            WHERE me.id_especialidad = ?
+        `;
+        try {
+            const [medicos] = await connection.query(query, [id_especialidad]);
+            return medicos; // Devuelve los médicos según la especialidad
+        } finally {
+            await connection.end(); // Cierra la conexión
+        }
+    }
 }
 
 module.exports = Medico;
+
