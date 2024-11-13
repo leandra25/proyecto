@@ -1,17 +1,28 @@
-const db = require('../config/db');
+const db = require('../config/db'); 
 
 class Turno {
-    static async solicitar(turno) {
-        const query = 'INSERT INTO turnos (nombre,telefono,id_medicos,fecha, hora) VALUES (?, ?, ?, ?, ?)';
-        await db.query(query, [turno.id_medico, turno.id_especialidad, turno.fecha, turno.hora, 'pendiente']);
+ 
+  static async solicitar(turno) {
+    const connection = await db;  
+    const query = 'INSERT INTO turnos (nombre, telefono, id_medicos, fecha, hora, estado) VALUES (?, ?, ?, ?, ?, ?)';
+    try {
+      await connection.query(query, [turno.nombre, turno.telefono, turno.id_medico, turno.fecha, turno.hora, 'pendiente']);
+    } finally {
+      await connection.end();  
     }
+  }
 
-    static async listarDisponibles(id_especialidad) {
-        const query = 'SELECT * FROM turnos WHERE id_medicos = ?';
-        const [results] = await db.query(query, [id_especialidad]);
-        return results;
+  
+  static async listarDisponibles(id_especialidad) {
+    const connection = await db;  
+    const query = 'SELECT * FROM turnos WHERE id_especialidad = ? AND estado = "pendiente"';
+    try {
+      const [results] = await connection.query(query, [id_especialidad]);
+      return results;  
+    } finally {
+      await connection.end();  
     }
+  }
 }
 
 module.exports = Turno;
-
