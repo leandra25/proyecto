@@ -8,7 +8,7 @@ class Disponibilidad {
       FROM disponibilidad
       WHERE id_medicos = ? 
       AND fecha >= CURDATE()  
-      AND (fecha = ? OR ? IS NULL)`;
+      AND (fecha = ? OR ? IS NULL) `;
 
     try {
       
