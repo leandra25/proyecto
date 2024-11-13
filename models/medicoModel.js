@@ -6,9 +6,7 @@ class Medico {
         try {
             const [results] = await connection.query('SELECT * FROM medicos');
             return results; 
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async create(medico) {
@@ -16,9 +14,7 @@ class Medico {
         const query = "INSERT INTO medicos (nombre, email, estado, especialidad) VALUES (?, ?, ?, ?)";
         try {
             await connection.query(query, [medico.nombre, medico.email, medico.activo, medico.especialidad]); 
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async findById(id) {
@@ -26,9 +22,7 @@ class Medico {
         try {
             const [results] = await connection.query('SELECT * FROM medicos WHERE id = ?', [id]);
             return results[0]; 
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async update(id, medico) {
@@ -36,9 +30,7 @@ class Medico {
         const query = 'UPDATE medicos SET ? WHERE id = ?';
         try {
             await connection.query(query, [medico, id]);
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async inactivar(id) {
@@ -51,9 +43,7 @@ class Medico {
         } catch (error) {
             console.error('Error al inactivar el médico:', error);
             return false; 
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async activar(id) {
@@ -66,9 +56,7 @@ class Medico {
         } catch (error) {
             console.error('Error al activar el médico:', error);
             return false; 
-        } finally {
-            await connection.end(); 
-        }
+        } 
     }
 
     static async obtenerPorEspecialidad(id_especialidad) {
@@ -82,8 +70,6 @@ class Medico {
         try {
             const [medicos] = await connection.query(query, [id_especialidad]);
             return medicos; 
-        } finally {
-            await connection.end(); 
         }
     }
 }
